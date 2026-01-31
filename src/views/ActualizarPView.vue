@@ -1,6 +1,6 @@
 <template>
   <div class="contenedor-vista">
-    <h1>Actualizar Información</h1>
+    <h1>Actualización Parcial</h1>
 
     <div class="buscador">
       <label>Buscar por ID: </label>
@@ -14,21 +14,21 @@
 
     <hr />
 
-    <ActualizarComponent 
+    <ActualizarPComponent 
       v-if="estudianteEncontrado" 
       :estudiante="estudianteEncontrado"
-      @actualizar-estudiante="procesarActualizacion" 
+      @patch-estudiante="procesarPatch" 
     />
   </div>
 </template>
 
 <script>
-import ActualizarComponent from '@/components/ActualizarComponent.vue';
-import { consultarPorIdFachada, actualizarFachada } from '@/clients/MatriculaClient';
+import ActualizarPComponent from '../components/ActualizarPComponent.vue';
+import { consultarPorIdFachada, actualizarParcialFachada } from '@/clients/MatriculaClient';
 
 export default {
   components: {
-    ActualizarComponent
+    ActualizarPComponent
   },
   data() {
     return {
@@ -39,13 +39,13 @@ export default {
     };
   },
   methods: {
-
+    
     async buscarEstudiante() {
       this.mensaje = '';
-      this.estudianteEncontrado = null; 
+      this.estudianteEncontrado = null;
 
       if (!this.idBusqueda) {
-        this.mensaje = "Ingrese un ID válido.";
+        this.mensaje = "Ingrese un ID.";
         this.claseMensaje = "msg-error";
         return;
       }
@@ -54,29 +54,30 @@ export default {
         const data = await consultarPorIdFachada(this.idBusqueda);
         if (data) {
           this.estudianteEncontrado = data;
-          this.mensaje = "Estudiante cargado. Edite los datos y pulse Actualizar.";
+          this.mensaje = "Estudiante cargado para edición parcial.";
           this.claseMensaje = "msg-info";
         }
       } catch (error) {
         console.error(error);
-        this.mensaje = "No se encontró el estudiante.";
+        this.mensaje = "Estudiante no encontrado.";
         this.claseMensaje = "msg-error";
       }
     },
 
    
-    async procesarActualizacion(estudianteModificado) {
-      this.mensaje = "Guardando cambios...";
+    async procesarPatch(estudianteModificado) {
+      this.mensaje = "Aplicando cambios parciales...";
       this.claseMensaje = "msg-info";
 
       try {
-        await actualizarFachada(estudianteModificado.id, estudianteModificado);
+       
+        await actualizarParcialFachada(estudianteModificado.id, estudianteModificado);
         
-        this.mensaje = "¡Actualización exitosa!";
+        this.mensaje = "¡Actualización parcial exitosa!";
         this.claseMensaje = "msg-exito";
       } catch (error) {
         console.error(error);
-        this.mensaje = "Error al intentar actualizar.";
+        this.mensaje = "Error al aplicar el parche.";
         this.claseMensaje = "msg-error";
       }
     }
@@ -113,11 +114,11 @@ export default {
   margin-top: 10px;
 }
 
-
+/* Colores de estado */
 .msg-info {
-  color: #004085;
-  background-color: #cce5ff;
-  border: 1px solid #b8daff;
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border: 1px solid #bee5eb;
 }
 .msg-exito {
   color: #155724;
