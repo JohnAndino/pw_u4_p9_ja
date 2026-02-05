@@ -11,7 +11,12 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    meta: {
+      requiereAutorizacion: true,
+      esPublica: false
+    }
+
   },
   {
     path: '/about',
@@ -19,32 +24,50 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
+    meta: {
+      requiereAutorizacion: true,
+      esPublica: false
+    }
   },
   {
     path: '/consultar',      
     name: 'consultar',
-    component: ConsultarTView
+    component: ConsultarTView,
+    
   },
   {
     path: '/consultar-id',
     name: 'consultar-id',
-    component: ConstularPorIdView
+    component: ConstularPorIdView,
+    
   },
   {
     path: '/guardar',
     name: 'guardar',
-    component: GuardarEstView
+    component: GuardarEstView,
+    meta: {
+      requiereAutorizacion: true,
+      esPublica: false
+    }
   },
   {
     path: '/borrar',
     name: 'borrar',
-    component: BorrarView
+    component: BorrarView,
+    meta: {
+      requiereAutorizacion: true,
+      esPublica: false
+    }
   },
   {
     path: '/actualizar',
     name: 'actualizar',
-    component: ActualizarView
+    component: ActualizarView,
+    meta: {
+      requiereAutorizacion: true,
+      esPublica: false
+    }
   },
   {
     path: '/patch',
@@ -57,5 +80,15 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
-
+/** Configuaracion del guardian */
+router.beforeEach((to, from, next)=>{
+  if(to.meta.requiereAutorizacion){
+    /*le envio a auna pagina de login */
+    console.log("Redirigiendo al login");
+  }else{
+    /*le dejo sin validaciones */
+    console.log("Pase libre");
+    next();
+  }
+})
 export default router

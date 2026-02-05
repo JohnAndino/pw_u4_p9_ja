@@ -26,8 +26,9 @@ const guardar = async (body) => {
     const TOKEN = await obtenerTokenFachada();
     const token = ""
     axios.post(`${URL}`,body, {headers:{Authorization: `Bearer ${TOKEN}`}}).then(r=>r.data);
-    console.log(data);
-    return data;
+    
+    
+   
 } 
 
 const actualizar = async (id, body) =>{
