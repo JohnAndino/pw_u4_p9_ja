@@ -1,12 +1,18 @@
 import axios from "axios";
+import { obtenerTokenFachada } from "../clients/AuthorizationClient.js";
+
+const URL = "http://localhost:8081/matricula/api/v1.0/estudiantes";
+
 
 const consultarTodos = async ()=>{
-    const data = axios.get('http://localhost:8081/matricula/api/v1.0/estudiantes').then(r=>r.data)
+    const TOKEN = await obtenerTokenFachada();
+    const data = axios.get(`${URL}`, {headers:{Authorization: `Bearer ${TOKEN}`}}).then(r=>r.data)
     return data;
 }
 
 const consultarPorId = async () => {
-    const data = axios.get(`http://localhost:8081/matricula/api/v1.0/estudiantes/${id}`).then(r=>r.data)
+    const TOKEN = await obtenerTokenFachada();
+    const data = axios.get(`${URL}/${id}`, {headers:{Authorization: `Bearer ${TOKEN}`}}).then(r=>r.data)
     return data;
 }
 
@@ -15,25 +21,32 @@ const guardar = async (body) => {
         nombre:'John',
         apellido:'Andino'
     };*/
-    axios.post(`http://localhost:8081/matricula/api/v1.0/estudiantes`,body).then(r=>r.data);
+
+    //Dentro del metodo puede ir como parametros la URL, String Data y una configuracion la cual son los Headers 
+    const TOKEN = await obtenerTokenFachada();
+    const token = ""
+    axios.post(`${URL}`,body, {headers:{Authorization: `Bearer ${TOKEN}`}}).then(r=>r.data);
     console.log(data);
     return data;
 } 
 
 const actualizar = async (id, body) =>{
-    axios.put(`http://localhost:8081/matricula/api/v1.0/estudiantes/${id}`,body).then(r=>r.data);
+    const TOKEN = await obtenerTokenFachada();
+    axios.put(`${URL}/${id}`,body, {headers:{Authorization: `Bearer ${TOKEN}`}}).then(r=>r.data);
     console.log(data);
     return data;
 }
 
 const actualizarParcial = async (id, body) =>{
-    axios.patch(`http://localhost:8081/matricula/api/v1.0/estudiantes/${id}`,body).then(r=>r.data);
+    const TOKEN = await obtenerTokenFachada();
+    axios.patch(`${URL}/${id}`,body, {headers:{Authorization: `Bearer ${TOKEN}`}}).then(r=>r.data);
     console.log(data);
     return data;
 }
 
 const borrar = async (id) => {
-    axios.delete(`http://localhost:8081/matricula/api/v1.0/estudiantes/${id}`).then(r=>r.data);
+    const TOKEN = await obtenerTokenFachada();
+    axios.delete(`${URL}/${id}`, {headers:{Authorization: `Bearer ${TOKEN}`}}).then(r=>r.data);
 }
  
 
