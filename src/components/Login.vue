@@ -22,9 +22,9 @@ export default {
         };
     },
     methods: {
-        login(){
+        async login(){
             /*mandar a obtener el token */
-            const TOKEN = obtenerTokenFachada();
+            const TOKEN = await obtenerTokenFachada();
 
             if(TOKEN !== null){
                 localStorage.setItem("token",TOKEN);
